@@ -63,4 +63,31 @@ function renderComments() {
   });
 }
 
+addButton.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  const text = commentInput.value.trim();
+
+  if (!text || !name) {
+    alert("Пожалуйста, заполните оба поля: имя и комментарий.");
+    return;
+  }
+
+  const newComment = {
+    name,
+    text,
+    date: formatDate(new Date()),
+    likes: 0,
+    isLiked: false,
+  };
+
+  comments.push(newComment);
+
+  nameInput.value = "";
+  commentInput.value = "";
+
+  renderComments();
+});
+
+renderComments();
+
 console.log("It works!");
