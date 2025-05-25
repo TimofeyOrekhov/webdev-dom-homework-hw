@@ -35,6 +35,16 @@ const fullHeart = `
   </svg>
 `;
 
+function escapeHtml(text) {
+  return text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+
 function formatDate(date) {
   return `${date.toLocaleDateString("ru-RU", {
     day: "2-digit",
@@ -53,9 +63,9 @@ function renderComments() {
   comments.forEach((comment, index) => {
     const commentElement = commentTemplate.content.cloneNode(true);
 
-    commentElement.querySelector(".comment-name").textContent = comment.name;
+    commentElement.querySelector(".comment-name").textContent = escapeHtml(comment.name);
     commentElement.querySelector(".comment-date").textContent = comment.date;
-    commentElement.querySelector(".comment-text").textContent = comment.text;
+    commentElement.querySelector(".comment-text").textContent = escapeHtml(comment.text);
 
     const likeButton = commentElement.querySelector(".like-button");
     const likesCounter = commentElement.querySelector(".likes-counter");
@@ -70,10 +80,16 @@ function renderComments() {
       likeButton.classList.remove("-active-like");
     }
 
-    likeButton.addEventListener("click", () => {
+    likeButton.addEventListener("click", (event) => {
+      event.stopPropagation();
       comment.isLiked = !comment.isLiked;
       comment.likes += comment.isLiked ? 1 : -1;
       renderComments();
+    });
+
+    commentElement.querySelector(".comment").addEventListener("click", () => {
+      commentInput.value = `> ${escapeHtml(comment.name)}: ${escapeHtml(comment.text)} \n`
+      commentInput.focus();
     });
 
     commentsList.appendChild(commentElement);
@@ -90,8 +106,8 @@ addButton.addEventListener("click", () => {
   }
 
   const newComment = {
-    name,
-    text,
+    name: escapeHtml(name),
+    text: escapeHtml(text),
     date: formatDate(new Date()),
     likes: 0,
     isLiked: false,
