@@ -37,11 +37,12 @@ const fullHeart = `
 
 function escapeHtml(text) {
   return text
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&#34;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("$", "&#36");
 }
 
 
@@ -63,9 +64,10 @@ function renderComments() {
   comments.forEach((comment, index) => {
     const commentElement = commentTemplate.content.cloneNode(true);
 
-    commentElement.querySelector(".comment-name").textContent = escapeHtml(comment.name);
+    commentElement.querySelector(".comment-name").textContent = comment.name;
     commentElement.querySelector(".comment-date").textContent = comment.date;
-    commentElement.querySelector(".comment-text").textContent = escapeHtml(comment.text);
+    commentElement.querySelector(".comment-text").textContent = comment.text;
+
 
     const likeButton = commentElement.querySelector(".like-button");
     const likesCounter = commentElement.querySelector(".likes-counter");
@@ -88,7 +90,7 @@ function renderComments() {
     });
 
     commentElement.querySelector(".comment").addEventListener("click", () => {
-      commentInput.value = `> ${escapeHtml(comment.name)}: ${escapeHtml(comment.text)} \n`
+      commentInput.value = `> ${escapeHtml(comment.name)}: ${escapeHtml(comment.text)}\n`;
       commentInput.focus();
     });
 
@@ -106,8 +108,8 @@ addButton.addEventListener("click", () => {
   }
 
   const newComment = {
-    name: escapeHtml(name),
-    text: escapeHtml(text),
+    name: name,
+    text: text,
     date: formatDate(new Date()),
     likes: 0,
     isLiked: false,
