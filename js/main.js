@@ -1,30 +1,35 @@
-const nameInput = document.getElementById('nameInput');
-const commentInput = document.getElementById('commentInput');
-const addButton = document.getElementById('addButton');
-const commentsList = document.getElementById('commentsList');
-const commentTemplate = document.getElementById('commentTemplate');
+import { formatDate } from './utils.js'
+import { renderComments } from './render.js'
+import { comments } from './data.js'
 
-addButton.addEventListener("click", () => {
-  const name = nameInput.value.trim();
-  const text = commentInput.value.trim();
+const nameInput = document.getElementById('nameInput')
+const commentInput = document.getElementById('commentInput')
+const addButton = document.getElementById('addButton')
+const commentsList = document.getElementById('commentsList')
+const commentTemplate = document.getElementById('commentTemplate')
 
-  if (!text || !name) {
-    alert("Пожалуйста, заполните оба поля: имя и комментарий.");
-    return;
-  }
+addButton.addEventListener('click', () => {
+    const name = nameInput.value.trim()
+    const text = commentInput.value.trim()
 
-  const newComment = {
-    name: name,
-    text: text,
-    date: formatDate(new Date()),
-    likes: 0,
-    isLiked: false,
-  };
+    if (!text || !name) {
+        alert('Пожалуйста, заполните оба поля: имя и комментарий.')
+        return
+    }
 
-  comments.push(newComment);
+    const newComment = {
+        name: name,
+        text: text,
+        date: formatDate(new Date()),
+        likes: 0,
+        isLiked: false,
+    }
 
-  nameInput.value = "";
-  commentInput.value = "";
+    comments.push(newComment)
 
-  renderComments();
-});
+    nameInput.value = ''
+    commentInput.value = ''
+
+    renderComments(comments, commentsList, commentInput, commentTemplate)
+})
+renderComments(comments, commentsList, commentInput, commentTemplate)
