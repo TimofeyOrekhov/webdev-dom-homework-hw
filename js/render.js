@@ -1,5 +1,6 @@
 import { comments, emptyHeart, fullHeart } from './data.js'
 import { escapeHtml } from './utils.js'
+import { addLikeListeners, addQuoteListeners } from './listeners.js'
 
 const commentsList = document.getElementById('commentsList')
 
@@ -27,4 +28,7 @@ export function renderComments() {
     `,
         )
         .join('')
+
+    addLikeListeners()
+    addQuoteListeners()
 }

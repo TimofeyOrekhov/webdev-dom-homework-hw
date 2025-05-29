@@ -1,7 +1,7 @@
 import { renderComments } from './render.js'
-import { setupListeners } from './listeners.js'
+import { addFormListener } from './listeners.js'
 
 renderComments()
-setupListeners()
+addFormListener()
 
 console.log('It works!')
