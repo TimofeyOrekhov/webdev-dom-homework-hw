@@ -1,54 +1,30 @@
-import { emptyHeart, fullHeart } from './templates.js'
+import { comments, emptyHeart, fullHeart } from './data.js'
 import { escapeHtml } from './utils.js'
 
-export function renderComments(
-    comments,
-    commentsList,
-    commentInput,
-    commentTemplate,
-) {
-    commentsList.innerHTML = ''
+const commentsList = document.getElementById('commentsList')
 
-    comments.forEach((comment) => {
-        const commentElement = commentTemplate.content.cloneNode(true)
-
-        commentElement.querySelector('.comment-name').textContent = comment.name
-        commentElement.querySelector('.comment-date').textContent = comment.date
-        commentElement.querySelector('.comment-text').textContent = comment.text
-
-        const likeButton = commentElement.querySelector('.like-button')
-        const likesCounter = commentElement.querySelector('.likes-counter')
-
-        likesCounter.textContent = comment.likes
-
-        likeButton.innerHTML = comment.isLiked ? fullHeart : emptyHeart
-
-        if (comment.isLiked) {
-            likeButton.classList.add('-active-like')
-        } else {
-            likeButton.classList.remove('-active-like')
-        }
-
-        likeButton.addEventListener('click', (event) => {
-            event.stopPropagation()
-            console.log('click')
-            comment.isLiked = !comment.isLiked
-            comment.likes += comment.isLiked ? 1 : -1
-            renderComments(
-                comments,
-                commentsList,
-                commentInput,
-                commentTemplate,
-            )
-        })
-
-        commentElement
-            .querySelector('.comment')
-            .addEventListener('click', () => {
-                commentInput.value = `> ${escapeHtml(comment.name)}: ${escapeHtml(comment.text)}\n`
-                commentInput.focus()
-            })
-
-        commentsList.appendChild(commentElement)
-    })
+export function renderComments() {
+    commentsList.innerHTML = comments
+        .map(
+            (comment, index) => `
+      <li class="comment" data-index="${index}">
+        <div class="comment-header">
+          <div class="comment-name">${escapeHtml(comment.name)}</div>
+          <div class="comment-date">${comment.date}</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">${escapeHtml(comment.text)}</div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">${comment.likes}</span>
+            <button class="like-button ${comment.isLiked ? '-active-like' : ''}">
+              ${comment.isLiked ? fullHeart : emptyHeart}
+            </button>
+          </div>
+        </div>
+      </li>
+    `,
+        )
+        .join('')
 }
