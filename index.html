@@ -1,45 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    <head>
+        <title>Проект "Комменты"</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-<head>
-  <title>Проект "Комменты"</title>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
+    <body>
+        <div class="container">
+            <ul class="comments" id="commentsList"></ul>
+            <div class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                    id="nameInput"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    id="commentInput"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button" id="addButton">
+                        Написать
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
 
-<body>
-  <div class="container">
-    <ul class="comments" id="commentsList"></ul>
-    <div class="add-form">
-      <input type="text" class="add-form-name" placeholder="Введите ваше имя" id="nameInput" />
-      <textarea type="textarea" class="add-form-text" id="commentInput" placeholder="Введите ваш коментарий"
-        rows="4"></textarea>
-      <div class="add-form-row">
-        <button class="add-form-button" id="addButton">Написать</button>
-      </div>
-    </div>
-  </div>
-</body>
-
-<template id="commentTemplate">
-  <li class="comment">
-    <div class="comment-header">
-      <div class="comment-name"></div>
-      <div class="comment-date"></div>
-    </div>
-    <div class="comment-body">
-      <div class="comment-text"></div>
-    </div>
-    <div class="comment-footer">
-      <div class="likes">
-        <span class="likes-counter">0</span>
-        <button class="like-button"></button>
-      </div>
-    </div>
-  </li>
-</template>
-
-<script src="./script.js"></script>
-
-
+    <script type="module" src="/js/main.js"></script>
 </html>
