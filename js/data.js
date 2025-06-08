@@ -1,19 +1,14 @@
-export const comments = [
-    {
-        name: 'Глеб Фокин',
-        date: '12.02.22 12:18',
-        text: 'Это будет первый комментарий на этой странице',
-        likes: 3,
-        isLiked: false,
-    },
-    {
-        name: 'Варвара Н.',
-        date: '13.02.22 19:22',
-        text: 'Мне нравится как оформлена эта страница! ❤',
-        likes: 75,
-        isLiked: true,
-    },
-]
+export let comments = []
+
+export const updateComments = (newComments) => {
+    comments = newComments.map((comment) => ({
+        name: comment.author.name,
+        date: new Date(comment.date).toLocaleString('ru-RU'),
+        text: comment.text,
+        likes: comment.likes,
+        isLiked: comment.isLiked,
+    }))
+}
 
 export const emptyHeart = `
   <svg width="22" height="20" viewBox="0 0 22 20" xmlns="http://www.w3.org/2000/svg">

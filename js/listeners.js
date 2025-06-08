@@ -1,13 +1,14 @@
-import { comments } from './data.js'
-import { escapeHtml, formatDate } from './utils.js'
+import { comments, updateComments } from './data.js'
+import { escapeHtml } from './utils.js'
 import { renderComments } from './render.js'
+import { addComment, getComments } from './api.js'
 
 export function addFormListener() {
     const nameInput = document.getElementById('nameInput')
     const commentInput = document.getElementById('commentInput')
     const addButton = document.getElementById('addButton')
 
-    addButton.addEventListener('click', () => {
+    addButton.addEventListener('click', async () => {
         const name = nameInput.value.trim()
         const text = commentInput.value.trim()
 
@@ -16,20 +17,19 @@ export function addFormListener() {
             return
         }
 
-        const newComment = {
-            name,
-            text,
-            date: formatDate(new Date()),
-            likes: 0,
-            isLiked: false,
+        try {
+            await addComment(text, name)
+            const updatedComments = await getComments()
+            updateComments(updatedComments)
+            nameInput.value = ''
+            commentInput.value = ''
+
+            renderComments()
+        } catch (error) {
+            alert(
+                error.message || 'Произошла ошибка при добавлении комментария',
+            )
         }
-
-        comments.push(newComment)
-
-        nameInput.value = ''
-        commentInput.value = ''
-
-        renderComments()
     })
 }
 
