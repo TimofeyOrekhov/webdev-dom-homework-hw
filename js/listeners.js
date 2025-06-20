@@ -8,12 +8,29 @@ export function addFormListener() {
     const commentInput = document.getElementById('commentInput')
     const addButton = document.getElementById('addButton')
 
+    function resetFormState() {
+        addButton.disabled = false
+        nameInput.disabled = false
+        commentInput.disabled = false
+        addButton.textContent = 'Добавить'
+    }
+
+    function loadFormState() {
+        addButton.disabled = true
+        nameInput.disabled = true
+        commentInput.disabled = true
+        addButton.textContent = 'Загрузка...'
+    }
+
     addButton.addEventListener('click', async () => {
         const name = nameInput.value.trim()
         const text = commentInput.value.trim()
 
+        loadFormState()
+
         if (!text || !name) {
             alert('Пожалуйста, заполните оба поля: имя и комментарий.')
+            resetFormState()
             return
         }
 
@@ -23,12 +40,13 @@ export function addFormListener() {
             updateComments(updatedComments)
             nameInput.value = ''
             commentInput.value = ''
-
             renderComments()
         } catch (error) {
             alert(
                 error.message || 'Произошла ошибка при добавлении комментария',
             )
+        } finally {
+            resetFormState()
         }
     })
 }
