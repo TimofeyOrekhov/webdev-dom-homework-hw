@@ -3,6 +3,17 @@ import { escapeHtml } from './utils.js'
 import { renderComments } from './render.js'
 import { addComment, getComments } from './api.js'
 
+function setFormState(isLoading) {
+    const nameInput = document.getElementById('nameInput')
+    const commentInput = document.getElementById('commentInput')
+    const addButton = document.getElementById('addButton')
+
+    addButton.disabled = isLoading
+    nameInput.disabled = isLoading
+    commentInput.disabled = isLoading
+    addButton.textContent = isLoading ? 'Загрузка...' : 'Добавить'
+}
+
 export function addFormListener() {
     const nameInput = document.getElementById('nameInput')
     const commentInput = document.getElementById('commentInput')
@@ -12,8 +23,11 @@ export function addFormListener() {
         const name = nameInput.value.trim()
         const text = commentInput.value.trim()
 
+        setFormState(true)
+
         if (!text || !name) {
             alert('Пожалуйста, заполните оба поля: имя и комментарий.')
+            setFormState(false)
             return
         }
 
@@ -23,12 +37,13 @@ export function addFormListener() {
             updateComments(updatedComments)
             nameInput.value = ''
             commentInput.value = ''
-
             renderComments()
         } catch (error) {
             alert(
                 error.message || 'Произошла ошибка при добавлении комментария',
             )
+        } finally {
+            setFormState(false)
         }
     })
 }

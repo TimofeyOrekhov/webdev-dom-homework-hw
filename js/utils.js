@@ -5,7 +5,7 @@ export function escapeHtml(text) {
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&#34;')
         .replaceAll("'", '&#39;')
-        .replaceAll('$', '&#36')
+        .replaceAll('$', '&#36;')
 }
 
 export function formatDate(date) {

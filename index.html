@@ -8,29 +8,34 @@
 
     <body>
         <div class="container">
-            <ul class="comments" id="commentsList"></ul>
-            <div class="add-form">
-                <input
-                    type="text"
-                    class="add-form-name"
-                    placeholder="Введите ваше имя"
-                    id="nameInput"
-                />
-                <textarea
-                    type="textarea"
-                    class="add-form-text"
-                    id="commentInput"
-                    placeholder="Введите ваш коментарий"
-                    rows="4"
-                ></textarea>
-                <div class="add-form-row">
-                    <button class="add-form-button" id="addButton">
-                        Написать
-                    </button>
+            <div id="loader" class="loader">
+                Комментарии загружаются. Пожалуйста, подождите...
+            </div>
+            <div id="main-content">
+                <ul class="comments" id="commentsList"></ul>
+                <div class="add-form">
+                    <input
+                        type="text"
+                        class="add-form-name"
+                        placeholder="Введите ваше имя"
+                        id="nameInput"
+                    />
+                    <textarea
+                        type="textarea"
+                        class="add-form-text"
+                        id="commentInput"
+                        placeholder="Введите ваш коментарий"
+                        rows="4"
+                    ></textarea>
+                    <div class="add-form-row">
+                        <button class="add-form-button" id="addButton">
+                            Написать
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
 
-    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/index.js"></script>
 </html>
