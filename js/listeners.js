@@ -3,34 +3,31 @@ import { escapeHtml } from './utils.js'
 import { renderComments } from './render.js'
 import { addComment, getComments } from './api.js'
 
+function setFormState(isLoading) {
+    const nameInput = document.getElementById('nameInput')
+    const commentInput = document.getElementById('commentInput')
+    const addButton = document.getElementById('addButton')
+
+    addButton.disabled = isLoading
+    nameInput.disabled = isLoading
+    commentInput.disabled = isLoading
+    addButton.textContent = isLoading ? 'Загрузка...' : 'Добавить'
+}
+
 export function addFormListener() {
     const nameInput = document.getElementById('nameInput')
     const commentInput = document.getElementById('commentInput')
     const addButton = document.getElementById('addButton')
 
-    function resetFormState() {
-        addButton.disabled = false
-        nameInput.disabled = false
-        commentInput.disabled = false
-        addButton.textContent = 'Добавить'
-    }
-
-    function loadFormState() {
-        addButton.disabled = true
-        nameInput.disabled = true
-        commentInput.disabled = true
-        addButton.textContent = 'Загрузка...'
-    }
-
     addButton.addEventListener('click', async () => {
         const name = nameInput.value.trim()
         const text = commentInput.value.trim()
 
-        loadFormState()
+        setFormState(true)
 
         if (!text || !name) {
             alert('Пожалуйста, заполните оба поля: имя и комментарий.')
-            resetFormState()
+            setFormState(false)
             return
         }
 
@@ -46,7 +43,7 @@ export function addFormListener() {
                 error.message || 'Произошла ошибка при добавлении комментария',
             )
         } finally {
-            resetFormState()
+            setFormState(false)
         }
     })
 }

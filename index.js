@@ -1,7 +1,7 @@
-import { renderComments } from './render.js'
-import { addFormListener } from './listeners.js'
-import { getComments } from './api.js'
-import { updateComments } from './data.js'
+import { renderComments } from './js/render.js'
+import { addFormListener } from './js/listeners.js'
+import { getComments } from './js/api.js'
+import { updateComments } from './js/data.js'
 
 async function initApp() {
     document.getElementById('loader').style.display = 'block'
