@@ -1,40 +1,48 @@
-const BASE_URL = 'https://wedev-api.sky.pro/api/v1/OrekhovTimofey/comments'
+const BASE_URL = 'https://wedev-api.sky.pro/api/v1/Orekhov/comments'
 
 export async function getComments() {
     try {
         const response = await fetch(BASE_URL)
+
+        if (response.status === 500) {
+            throw new Error('Сервер сломался, попробуй позже')
+        }
         if (!response.ok) {
             throw new Error('Ошибка при получении комментариев')
         }
+
         const data = await response.json()
         return data.comments
     } catch (error) {
-        console.error('Ошибка при получении комментариев:', error)
+        if (error.message === 'Failed to fetch') {
+            alert('Проверь подключение к интернету')
+        } else {
+            alert(error.message)
+        }
         return []
     }
 }
 
 export async function addComment(text, name) {
-    try {
-        if (!text || !name || text.length < 3 || name.length < 3) {
-            throw new Error(
-                'Имя и текст комментария должны содержать минимум 3 символа',
-            )
-        }
+    const response = await fetch(BASE_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+            text,
+            name,
+            forceError: true,
+        }),
+    })
 
-        const response = await fetch(BASE_URL, {
-            method: 'POST',
-            body: JSON.stringify({ text, name }),
-        })
-
-        if (!response.ok) {
-            const error = await response.json()
-            throw new Error(error.error || 'Ошибка при добавлении комментария')
-        }
-
-        return true
-    } catch (error) {
-        console.error('Ошибка при добавлении комментария:', error)
-        throw error
+    if (response.status === 400) {
+        throw new Error('Имя и текст комментария обязательны для заполнения')
     }
+    if (response.status === 500) {
+        throw new Error('Сервер сломался, попробуй позже')
+    }
+    if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Ошибка при добавлении комментария')
+    }
+
+    return true
 }

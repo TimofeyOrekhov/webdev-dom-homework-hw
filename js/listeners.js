@@ -3,6 +3,9 @@ import { escapeHtml } from './utils.js'
 import { renderComments } from './render.js'
 import { addComment, getComments } from './api.js'
 
+let savedName = ''
+let savedText = ''
+
 function setFormState(isLoading) {
     const nameInput = document.getElementById('nameInput')
     const commentInput = document.getElementById('commentInput')
@@ -19,22 +22,34 @@ export function addFormListener() {
     const commentInput = document.getElementById('commentInput')
     const addButton = document.getElementById('addButton')
 
-    addButton.addEventListener('click', async () => {
-        const name = nameInput.value.trim()
-        const text = commentInput.value.trim()
+    // Сохраняем введённые данные в переменные
+    nameInput.addEventListener('input', () => (savedName = nameInput.value))
+    commentInput.addEventListener(
+        'input',
+        () => (savedText = commentInput.value),
+    )
 
+    addButton.addEventListener('click', async () => {
         setFormState(true)
 
-        if (!text || !name) {
+        if (!savedText || !savedName) {
             alert('Пожалуйста, заполните оба поля: имя и комментарий.')
             setFormState(false)
             return
         }
 
+        if (savedText.trim().length < 3 || savedName.trim().length < 3) {
+            alert('Имя и текст комментария должны содержать минимум 3 символа')
+            setFormState(false)
+            return
+        }
+
         try {
-            await addComment(text, name)
+            await addComment(savedText.trim(), savedName.trim())
             const updatedComments = await getComments()
             updateComments(updatedComments)
+            savedName = ''
+            savedText = ''
             nameInput.value = ''
             commentInput.value = ''
             renderComments()
@@ -74,4 +89,9 @@ export function addQuoteListeners() {
             commentInput.focus()
         })
     })
+}
+
+export function renderForm() {
+    document.getElementById('nameInput').value = savedName
+    document.getElementById('commentInput').value = savedText
 }
