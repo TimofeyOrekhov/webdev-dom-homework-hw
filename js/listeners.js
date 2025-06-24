@@ -32,18 +32,6 @@ export function addFormListener() {
     addButton.addEventListener('click', async () => {
         setFormState(true)
 
-        if (!savedText || !savedName) {
-            alert('Пожалуйста, заполните оба поля: имя и комментарий.')
-            setFormState(false)
-            return
-        }
-
-        if (savedText.trim().length < 3 || savedName.trim().length < 3) {
-            alert('Имя и текст комментария должны содержать минимум 3 символа')
-            setFormState(false)
-            return
-        }
-
         try {
             await addComment(savedText.trim(), savedName.trim())
             const updatedComments = await getComments()

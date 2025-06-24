@@ -34,7 +34,9 @@ export async function addComment(text, name) {
     })
 
     if (response.status === 400) {
-        throw new Error('Имя и текст комментария обязательны для заполнения')
+        throw new Error(
+            'Имя и комментарий должны быть заполнены и содержать не менее 3 символов.',
+        )
     }
     if (response.status === 500) {
         throw new Error('Сервер сломался, попробуй позже')
