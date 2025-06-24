@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wedev-api.sky.pro/api/v1/Orekhov/comments'
+const BASE_URL = 'https://wedev-api.sky.pro/api/v1/OrekhovTimofey/comments'
 
 export async function getComments() {
     try {
@@ -41,7 +41,6 @@ export async function addComment(text, name, retryCount = 4) {
         }
         if (response.status === 500) {
             if (attempt < retryCount) {
-                // Без задержки, сразу повторяем
                 continue
             } else {
                 throw new Error('Сервер сломался, попробуй позже')
