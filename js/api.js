@@ -25,32 +25,45 @@ export async function getComments() {
 
 export async function addComment(text, name, retryCount = 4) {
     for (let attempt = 0; attempt <= retryCount; attempt++) {
-        const response = await fetch(BASE_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                text,
-                name,
-                forceError: true,
-            }),
-        })
+        try {
+            const response = await fetch(BASE_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    text,
+                    name,
+                    forceError: true,
+                }),
+            })
 
-        if (response.status === 400) {
-            throw new Error(
-                'Имя и комментарий должны быть заполнены и содержать не менее 3 символов.',
-            )
-        }
-        if (response.status === 500) {
-            if (attempt < retryCount) {
-                continue
-            } else {
-                throw new Error('Сервер сломался, попробуй позже')
+            if (response.status === 400) {
+                throw new Error(
+                    'Имя и комментарий должны быть заполнены и содержать не менее 3 символов.',
+                )
+            }
+
+            if (response.status === 500) {
+                if (attempt < retryCount) {
+                    continue
+                } else {
+                    throw new Error('Сервер сломался, попробуй позже')
+                }
+            }
+
+            if (!response.ok) {
+                const error = await response.json()
+                throw new Error(
+                    error.error || 'Ошибка при добавлении комментария',
+                )
+            }
+
+            return true
+        } catch (error) {
+            if (error.message === 'Failed to fetch') {
+                throw new Error('Проверь подключение к интернету')
+            }
+            if (attempt >= retryCount) {
+                throw error
             }
         }
-        if (!response.ok) {
-            const error = await response.json()
-            throw new Error(error.error || 'Ошибка при добавлении комментария')
-        }
-
-        return true
     }
 }
