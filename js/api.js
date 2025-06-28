@@ -43,6 +43,7 @@ export async function addComment(text, name, retryCount = 4) {
 
             if (response.status === 500) {
                 if (attempt < retryCount) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000))
                     continue
                 } else {
                     throw new Error('Сервер сломался, попробуй позже')
