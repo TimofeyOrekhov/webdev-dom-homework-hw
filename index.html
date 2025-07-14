@@ -11,7 +11,84 @@
             <div id="loader" class="loader">
                 Комментарии загружаются. Пожалуйста, подождите...
             </div>
+            <div id="auth-block" style="display: none">
+                <form id="login-form" class="auth-form hidden">
+                    <h2>Вход</h2>
+                    <input
+                        type="text"
+                        id="login-login"
+                        class="add-form-name"
+                        placeholder="Логин"
+                        required
+                    />
+                    <input
+                        type="password"
+                        id="login-password"
+                        class="add-form-name"
+                        placeholder="Пароль"
+                        required
+                        style="margin-top: 12px"
+                    />
+                    <div class="add-form-row">
+                        <button type="submit" class="add-form-button">
+                            Войти
+                        </button>
+                    </div>
+                    <div class="add-form-row">
+                        <span id="to-register" class="link-btn"
+                            >Регистрация</span
+                        >
+                    </div>
+                </form>
+                <form id="register-form" class="auth-form hidden">
+                    <h2>Регистрация</h2>
+                    <input
+                        type="text"
+                        id="register-name"
+                        class="add-form-name"
+                        placeholder="Имя"
+                        required
+                    />
+                    <input
+                        type="text"
+                        id="register-login"
+                        class="add-form-name"
+                        placeholder="Логин"
+                        required
+                        style="margin-top: 12px"
+                    />
+                    <input
+                        type="password"
+                        id="register-password"
+                        class="add-form-name"
+                        placeholder="Пароль"
+                        required
+                        style="margin-top: 12px"
+                    />
+                    <div class="add-form-row">
+                        <button type="submit" class="add-form-button">
+                            Зарегистрироваться
+                        </button>
+                    </div>
+                    <div class="add-form-row">
+                        <span id="to-login" class="link-btn">Войти</span>
+                    </div>
+                </form>
+            </div>
             <div id="main-content">
+                <button
+                    id="logout-btn"
+                    class="add-form-button"
+                    style="
+                        display: none;
+                        float: right;
+                        margin-bottom: 16px;
+                        background: #7334ea;
+                        color: #fff;
+                    "
+                >
+                    Выйти
+                </button>
                 <ul class="comments" id="commentsList"></ul>
                 <div class="add-form">
                     <input

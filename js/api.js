@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wedev-api.sky.pro/api/v2/:Orekhov/comments'
+const BASE_URL = 'https://wedev-api.sky.pro/api/v2/Orekhov/comments'
 const loginHost = 'https://wedev-api.sky.pro/api/user/login'
 const registrationHost = 'https://wedev-api.sky.pro/api/user'
 let token = ''
@@ -38,7 +38,10 @@ export function clearAuth() {
 
 export async function getComments() {
     try {
-        const response = await fetch(BASE_URL)
+        const token = getToken()
+        const response = await fetch(BASE_URL, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
 
         if (response.status === 500) {
             throw new Error('Сервер сломался, попробуй позже')
@@ -59,14 +62,14 @@ export async function getComments() {
     }
 }
 
-export async function addComment(text) {
-    // Имя пользователя не передаем, оно берется с сервера по токену
+export async function addComment(text, name) {
+    const bodyObj = { text, name }
     const response = await fetch(BASE_URL, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify(bodyObj),
     })
     if (response.status === 400) {
         const error = await response.json()
@@ -81,9 +84,6 @@ export async function addComment(text) {
 export async function login(login, password) {
     const response = await fetch(loginHost, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ login, password }),
     })
 
@@ -101,9 +101,6 @@ export async function login(login, password) {
 export async function registration(login, password, name) {
     const response = await fetch(registrationHost, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ login, password, name }),
     })
 
@@ -116,4 +113,31 @@ export async function registration(login, password, name) {
     setToken(data.user.token)
     setUser({ name: data.user.name, login: data.user.login })
     return data.user
+}
+
+export async function deleteComment(id) {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    })
+    if (!response.ok) {
+        throw new Error('Ошибка при удалении комментария')
+    }
+    return true
+}
+
+export async function toggleLike(id) {
+    const response = await fetch(`${BASE_URL}/${id}/toggle-like`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    })
+    if (!response.ok) {
+        throw new Error('Ошибка при переключении лайка')
+    }
+    const data = await response.json()
+    return data.result
 }
