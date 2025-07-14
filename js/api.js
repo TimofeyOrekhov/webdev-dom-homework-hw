@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wedev-api.sky.pro/api/v2/Orekhov/comments'
+const BASE_URL = 'https://wedev-api.sky.pro/api/v2/OrekhovTimofey/comments'
 const loginHost = 'https://wedev-api.sky.pro/api/user/login'
 const registrationHost = 'https://wedev-api.sky.pro/api/user'
 let token = ''

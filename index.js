@@ -45,7 +45,16 @@ function showAuthForms(type = 'login') {
 function showMain() {
     document.getElementById('auth-block').style.display = 'none'
     document.getElementById('main-content').style.display = 'block'
-    document.getElementById('logout-btn').style.display = 'block'
+    const user = getUser()
+    if (user) {
+        document.querySelector('.add-form').style.display = 'block'
+        document.getElementById('login-prompt').style.display = 'none'
+        document.getElementById('logout-link').style.display = 'inline-block'
+    } else {
+        document.querySelector('.add-form').style.display = 'none'
+        document.getElementById('login-prompt').style.display = 'block'
+        document.getElementById('logout-link').style.display = 'none'
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,7 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
         initApp()
     } else {
-        showAuthForms('login')
+        document.getElementById('loader').style.display = 'block'
+        document.getElementById('main-content').style.display = 'none'
+        getComments().then((comments) => {
+            updateComments(comments)
+            renderComments()
+            showMain()
+            document.getElementById('loader').style.display = 'none'
+            document.getElementById('main-content').style.display = 'block'
+        })
     }
 
     // Переключение между формами
@@ -70,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .value.trim()
         try {
             await login(loginValue, passwordValue)
-            showMain()
             initApp()
         } catch (err) {
             alert(err.message)
@@ -88,17 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
             .value.trim()
         try {
             await registration(loginValue, passwordValue, nameValue)
-            showMain()
             initApp()
         } catch (err) {
             alert(err.message)
         }
     }
-    // Выход
-    document.getElementById('logout-btn').onclick = () => {
+
+    document.getElementById('logout-link').onclick = () => {
         clearAuth()
         showAuthForms('login')
     }
+    document.getElementById('login-prompt-link').onclick = () =>
+        showAuthForms('login')
 })
 
 console.log('It works!')

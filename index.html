@@ -76,20 +76,15 @@
                 </form>
             </div>
             <div id="main-content">
-                <button
-                    id="logout-btn"
-                    class="add-form-button"
-                    style="
-                        display: none;
-                        float: right;
-                        margin-bottom: 16px;
-                        background: #7334ea;
-                        color: #fff;
-                    "
-                >
-                    Выйти
-                </button>
                 <ul class="comments" id="commentsList"></ul>
+                <div
+                    id="login-prompt"
+                    style="display: none; text-align: center; margin-top: 32px"
+                >
+                    Чтобы отправлять комментарии,
+                    <span id="login-prompt-link" class="link-btn">войдите</span
+                    >.
+                </div>
                 <div class="add-form">
                     <input
                         type="text"
@@ -109,6 +104,9 @@
                             Написать
                         </button>
                     </div>
+                </div>
+                <div style="text-align: right; margin-top: 16px">
+                    <span id="logout-link" class="link-btn">Выйти</span>
                 </div>
             </div>
         </div>
