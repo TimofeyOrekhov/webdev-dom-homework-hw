@@ -32,12 +32,12 @@ export function addFormListener() {
     nameInput.style.display = 'block'
     const user = getUser()
     if (user && user.name) {
-        nameInput.placeholder = user.name
-    } else {
-        nameInput.placeholder = 'Введите ваше имя'
-    }
-    if (user && user.name) {
         nameInput.value = user.name
+        nameInput.readOnly = true
+    } else {
+        nameInput.value = ''
+        nameInput.placeholder = 'Введите ваше имя'
+        nameInput.readOnly = false
     }
     addButton.disabled = false
     commentInput.disabled = false

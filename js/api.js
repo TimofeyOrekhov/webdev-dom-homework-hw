@@ -2,7 +2,7 @@ const BASE_URL = 'https://wedev-api.sky.pro/api/v2/OrekhovTimofey/comments'
 const loginHost = 'https://wedev-api.sky.pro/api/user/login'
 const registrationHost = 'https://wedev-api.sky.pro/api/user'
 let token = ''
-let user = null // { name, login }
+// let user = null // { name, login } // Удаляем кэширование user
 
 export function setToken(newToken) {
     token = newToken
@@ -10,7 +10,7 @@ export function setToken(newToken) {
 }
 
 export function setUser(newUser) {
-    user = newUser
+    // user = newUser // Удаляем кэширование user
     localStorage.setItem('user', JSON.stringify(newUser))
 }
 
@@ -22,16 +22,13 @@ export function getToken() {
 }
 
 export function getUser() {
-    if (!user) {
-        const u = localStorage.getItem('user')
-        user = u ? JSON.parse(u) : null
-    }
-    return user
+    const u = localStorage.getItem('user')
+    return u ? JSON.parse(u) : null
 }
 
 export function clearAuth() {
     token = ''
-    user = null
+    // user = null // Удаляем кэширование user
     localStorage.removeItem('token')
     localStorage.removeItem('user')
 }
