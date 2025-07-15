@@ -1,13 +1,8 @@
 import { comments, updateComments, setCustomName } from './data.js'
 import { escapeHtml } from './utils.js'
 import { renderComments } from './render.js'
-import {
-    addComment,
-    getComments,
-    getUser,
-    deleteComment,
-    toggleLike,
-} from './api.js'
+import { getUser } from './auth.js'
+import { addComment, getComments, deleteComment, toggleLike } from './api.js'
 
 let savedText = ''
 let formListenerAdded = false
@@ -78,7 +73,7 @@ export function addLikeListeners() {
         likeBtn.addEventListener('click', async (event) => {
             event.stopPropagation()
             const li = likeBtn.closest('.comment')
-            const index = Number(li.dataset.index) // index нужен для обновления comments
+            const index = Number(li.dataset.index)
             if (!user) return
             try {
                 const id = li.dataset.id
@@ -100,7 +95,6 @@ export function addDeleteListeners() {
         delBtn.addEventListener('click', async (event) => {
             event.stopPropagation()
             const li = delBtn.closest('.comment')
-            // const index = Number(li.dataset.index) // index не используется
             if (!user) return
             if (!confirm('Удалить комментарий?')) return
             try {
@@ -130,6 +124,6 @@ export function addQuoteListeners() {
 }
 
 export function renderForm() {
-    document.getElementById('nameInput').value = '' // Удаляем сохранение имени
+    document.getElementById('nameInput').value = ''
     document.getElementById('commentInput').value = savedText
 }

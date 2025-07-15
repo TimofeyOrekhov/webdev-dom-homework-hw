@@ -5,7 +5,7 @@ import {
     addQuoteListeners,
     addDeleteListeners,
 } from './listeners.js'
-import { getUser } from './api.js'
+import { getUser } from './auth.js'
 
 const commentsList = document.getElementById('commentsList')
 
