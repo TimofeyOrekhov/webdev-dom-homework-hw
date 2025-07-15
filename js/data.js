@@ -1,8 +1,20 @@
 export let comments = []
 
+function getCustomNames() {
+    return JSON.parse(localStorage.getItem('customCommentNames') || '{}')
+}
+
+export function setCustomName(commentId, name) {
+    const names = getCustomNames()
+    names[commentId] = name
+    localStorage.setItem('customCommentNames', JSON.stringify(names))
+}
+
 export const updateComments = (newComments) => {
+    const customNames = getCustomNames()
     comments = newComments.map((comment) => ({
-        name: comment.author.name,
+        id: comment.id,
+        name: customNames[comment.id] || comment.author.name,
         date: new Date(comment.date).toLocaleString('ru-RU'),
         text: comment.text,
         likes: comment.likes,

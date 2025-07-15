@@ -1,8 +1,12 @@
-const BASE_URL = 'https://wedev-api.sky.pro/api/v1/OrekhovTimofey/comments'
+const BASE_URL = 'https://wedev-api.sky.pro/api/v2/OrekhovTimofey/comments'
+import { getToken } from './auth.js'
 
 export async function getComments() {
     try {
-        const response = await fetch(BASE_URL)
+        const token = getToken()
+        const response = await fetch(BASE_URL, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
 
         if (response.status === 500) {
             throw new Error('Сервер сломался, попробуй позже')
@@ -23,48 +27,48 @@ export async function getComments() {
     }
 }
 
-export async function addComment(text, name, retryCount = 4) {
-    for (let attempt = 0; attempt <= retryCount; attempt++) {
-        try {
-            const response = await fetch(BASE_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    text,
-                    name,
-                    forceError: true,
-                }),
-            })
-
-            if (response.status === 400) {
-                throw new Error(
-                    'Имя и комментарий должны быть заполнены и содержать не менее 3 символов.',
-                )
-            }
-
-            if (response.status === 500) {
-                if (attempt < retryCount) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000))
-                    continue
-                } else {
-                    throw new Error('Сервер сломался, попробуй позже')
-                }
-            }
-
-            if (!response.ok) {
-                const error = await response.json()
-                throw new Error(
-                    error.error || 'Ошибка при добавлении комментария',
-                )
-            }
-
-            return true
-        } catch (error) {
-            if (error.message === 'Failed to fetch') {
-                throw new Error('Проверь подключение к интернету')
-            }
-            if (attempt >= retryCount) {
-                throw error
-            }
-        }
+export async function addComment(text, name) {
+    const bodyObj = { text, name }
+    const response = await fetch(BASE_URL, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify(bodyObj),
+    })
+    if (response.status === 400) {
+        const error = await response.json()
+        throw new Error(error.error || 'Ошибка валидации')
     }
+    if (!response.ok) {
+        throw new Error('Ошибка при добавлении комментария')
+    }
+    return true
+}
+
+export async function deleteComment(id) {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    })
+    if (!response.ok) {
+        throw new Error('Ошибка при удалении комментария')
+    }
+    return true
+}
+
+export async function toggleLike(id) {
+    const response = await fetch(`${BASE_URL}/${id}/toggle-like`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    })
+    if (!response.ok) {
+        throw new Error('Ошибка при переключении лайка')
+    }
+    const data = await response.json()
+    return data.result
 }
